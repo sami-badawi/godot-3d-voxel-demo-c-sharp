@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://menu/main/title.png" type="Texture" id=1]
-[ext_resource path="res://menu/main/splash_text.gd" type="Script" id=2]
+[ext_resource path="res://menu/main/SplashText.cs" type="Script" id=2]
 [ext_resource path="res://menu/main/main_menu.gd" type="Script" id=3]
 [ext_resource path="res://menu/main/dark_dirt.png" type="Texture" id=4]
 [ext_resource path="res://menu/options/options.tscn" type="PackedScene" id=5]
@@ -228,6 +228,7 @@ __meta__ = {
 }
 
 [node name="Options" parent="." instance=ExtResource( 5 )]
+
 [connection signal="pressed" from="TitleScreen/ButtonHolder/MainButtons/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="TitleScreen/ButtonHolder/MainButtons/Options" to="." method="_on_Options_pressed"]
 [connection signal="pressed" from="TitleScreen/ButtonHolder/MainButtons/Exit" to="." method="_on_Exit_pressed"]
