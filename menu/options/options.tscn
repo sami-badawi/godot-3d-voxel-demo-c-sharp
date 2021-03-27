@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://menu/options/options.gd" type="Script" id=1]
+[ext_resource path="res://menu/options/Options.cs" type="Script" id=1]
 [ext_resource path="res://menu/options/option_buttons.gd" type="Script" id=2]
 [ext_resource path="res://menu/button.png" type="Texture" id=3]
 
@@ -107,6 +107,7 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="value_changed" from="VBoxContainer/OptionsBackground/OptionButtons/RenderDistanceSlider" to="VBoxContainer/OptionsBackground/OptionButtons" method="_on_RenderDistanceSlider_value_changed"]
 [connection signal="pressed" from="VBoxContainer/OptionsBackground/OptionButtons/FogCheckBox" to="VBoxContainer/OptionsBackground/OptionButtons" method="_on_FogCheckBox_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Back" to="." method="_on_Back_pressed"]
