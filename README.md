@@ -5,13 +5,20 @@ inspired by others such as Minecraft.
 
 Language: GDScript
 
-Renderer: GLES 2
+Renderer: GLES 3
 
 Check out this demo on the asset library: https://godotengine.org/asset-library/asset/676
 
 ## Work In Progress C# Port
 
 Started work on porting the original 3D Voxel Demo from GD script to C#.
+Porting a dynamic language to a static is a little messy. 
+
+Some classes are fully ported other are half ported and not enabled.
+
+Trying to keep the code as close to the GD script version as possible.
+
+Pull requests are welcome.
 
 ## How does it work?
 
