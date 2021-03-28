@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using static Godot.Mathf;
 
 public class Player : KinematicBody
 {
@@ -9,16 +10,22 @@ public Vector3 velocity = new Vector3();
 Vector2 _mouse_motion = new Vector2();
 int _selected_block = 6;
 
-// onready var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+float gravity;
 
-// onready var head = $Head
-// onready var raycast = $Head/RayCast
-// onready var selected_block_texture = $SelectedBlock
-// onready var voxel_world = $"../VoxelWorld"
+public Spatial head;
+public RayCast raycast;
+public TextureRect selected_block_texture;
+public VoxelWorld voxel_world;
 // onready var crosshair = $"../PauseMenu/Crosshair"
 
 	public override void _Ready()
 	{
+		gravity = (float) ProjectSettings.GetSetting("physics/3d/default_gravity");
+		head = GetNode<Spatial>("Head");
+		raycast = GetNode<RayCast>("Head/RayCast");
+		selected_block_texture = GetNode<TextureRect>("SelectedBlock");
+		voxel_world = GetNode<VoxelWorld>("../VoxelWorld");
+
 		Input.SetMouseMode(Input.MouseMode.Captured);        
 	}
 
@@ -27,9 +34,11 @@ public override void _Process(float delta)
 {
 	
 // 	// Mouse movement.
-// 	_mouse_motion.y = clamp(_mouse_motion.y, -1550, 1550)
-// 	transform.basis = Basis(Vector3(0, _mouse_motion.x * -0.001, 0))
-// 	head.transform.basis = Basis(Vector3(_mouse_motion.y * -0.001, 0, 0))
+	_mouse_motion.y = Clamp(_mouse_motion.y, -1550, 1550);
+	Transform t = GlobalTransform;
+	t.basis = new Basis(new Vector3(0, _mouse_motion.x * -0.001f, 0));
+	GlobalTransform = t;
+	// head.Transform.basis = new Basis(new Vector3(_mouse_motion.y * -0.001f, 0, 0));
 
 // 	// Block selection.
 // 	var position = raycast.get_collision_point()
@@ -70,43 +79,45 @@ public override void _PhysicsProcess(float delta)
 {
 	
 // 	// Crouching.
-// 	var crouching = Input.is_action_pressed("crouch")
-// 	if crouching:
-// 		head.transform.origin = Vector3(0, 1.2, 0)
-// 	else:
-// 		head.transform.origin = Vector3(0, 1.6, 0)
+	var crouching = Input.IsActionPressed("crouch");
+	// if (crouching)
+	// 	head.Transform.origin = new Vector3(0, 1.2f, 0);
+	// else
+	// 	head.Transform.origin = new Vector3(0, 1.6f, 0);
 
 // 	// Keyboard movement.
-// 	var movement = transform.basis.xform(Vector3(
-// 		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
-// 		0,
-// 		Input.get_action_strength("move_back") - Input.get_action_strength("move_forward")
-// 	).normalized() * (1 if crouching else 5))
+	var movement = Transform.basis.Xform(new Vector3(
+		Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left"),
+		0,
+		Input.GetActionStrength("move_back") - Input.GetActionStrength("move_forward")
+	).Normalized() * (crouching ? 1 : 5));
 
 // 	// Gravity.
-// 	velocity.y -= gravity * delta
+	velocity.y -= gravity * delta;
 
 // 	//warning-ignore:return_value_discarded
-// 	velocity = move_and_slide(Vector3(movement.x, velocity.y, movement.z), Vector3.UP)
+	velocity = MoveAndSlide(new Vector3(movement.x, velocity.y, movement.z), Vector3.Up);
 
 // 	// Jumping, applied next frame.
-// 	if is_on_floor() and Input.is_action_pressed("jump"):
-// 		velocity.y = 5
+	if (IsOnFloor() && Input.IsActionPressed("jump"))
+		velocity.y = 5;
 }
 
 
-// void _input(event) 
-// {	
-// 	if event is InputEventMouseMotion:
-// 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-// 			_mouse_motion += event.relative
-// }
+	public override void _Input(InputEvent e)
+{	
+	if (e is InputEventMouseMotion ev) {
+
+		if (Input.GetMouseMode() == Input.MouseMode.Captured)
+			_mouse_motion += ev.Relative;
+}
+}
 
 
-// public Vector3 chunk_pos()
-// {
-// 	return (transform.origin / Chunk.CHUNK_SIZE).floor();	
-// }
+public Vector3 chunk_pos()
+{
+	return (Transform.origin / Chunk.CHUNK_SIZE).Floor();	
+}
 	
 
 }

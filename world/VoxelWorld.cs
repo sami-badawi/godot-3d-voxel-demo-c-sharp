@@ -98,9 +98,9 @@ public class VoxelWorld : Node
 		var chunk_position = (block_global_position / Chunk.CHUNK_SIZE).Floor();
 		if (_chunks.Contains(chunk_position)) {
 			var chunk = _chunks[chunk_position];
-			// var sub_position = block_global_position.posmod(Chunk.CHUNK_SIZE);
-			// if (chunk.data.Contains(sub_position))
-			// 	return chunk.data[sub_position];
+			 var sub_position = block_global_position.PosMod(Chunk.CHUNK_SIZE);
+			//  if (chunk.data.Contains(sub_position))
+			//  	return chunk.data[sub_position];
 		}
 		return 0;
 	}
@@ -138,8 +138,8 @@ public class VoxelWorld : Node
 		// 	var thread = _chunks[chunk_position_key]._thread
 		// 	if thread:
 		// 		thread.wait_to_finish()
-		// _chunks = {}
-		// set_process(false)
+		_chunks = new Dictionary();
+		SetProcess(false);
 		// for c in get_children():
 		// 	c.free()
 	}
@@ -147,15 +147,15 @@ public class VoxelWorld : Node
 
 	void _delete_far_away_chunks(Vector3 player_chunk)
 	{
-	// 	_old_player_chunk = player_chunk
-	// 	# If we need to delete chunks, give the new chunk system a chance to catch up.
-	// 	effective_render_distance = max(1, effective_render_distance - 1)
+		_old_player_chunk = player_chunk;
+		// If we need to delete chunks, give the new chunk system a chance to catch up.
+		effective_render_distance = Max(1, effective_render_distance - 1);
 
-	// 	var deleted_this_frame = 0
-	// 	# We should delete old chunks more aggressively if moving fast.
-	// 	# An easy way to calculate this is by using the effective render distance.
-	// 	# The specific values in this formula are arbitrary and from experimentation.
-	// 	var max_deletions = clamp(2 * (render_distance - effective_render_distance), 2, 8)
+		int deleted_this_frame = 0;
+		// We should delete old chunks more aggressively if moving fast.
+		// An easy way to calculate this is by using the effective render distance.
+		// The specific values in this formula are arbitrary and from experimentation.
+		var max_deletions = Clamp(2 * (render_distance - effective_render_distance), 2, 8);
 	// 	# Also take the opportunity to delete far away chunks.
 	// 	for chunk_position_key in _chunks.keys():
 	// 		if player_chunk.distance_to(chunk_position_key) > _delete_distance:
@@ -171,13 +171,7 @@ public class VoxelWorld : Node
 	// 				_deleting = true
 	// 				return
 
-	// 	# We're done deleting.
-	// 	_deleting = false
+		// We're done deleting.
+		_deleting = false;
 	}
-
-
-	// func _set_render_distance(value):
-	// 	render_distance = value
-	// 	_delete_distance = value + 2
-
 }
