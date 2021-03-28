@@ -3,7 +3,7 @@ using System;
 
 public class Options : HBoxContainer
 {
-	Control prev_menu { get; set; }
+	public Control prev_menu { get; set; }
 
 	public override void _Ready()
 	{
