@@ -1,92 +1,112 @@
 using Godot;
 using Godot.Collections;
+using System.Collections.Generic;
+using static Godot.Mathf;
 using System;
+using System.Linq;
 
 /// <summary>
 /// This file manages the creation and deletion of Chunks.
 /// </summary>
 public class VoxelWorld : Node
 {
-	//     // Declare member variables here. Examples:
-	//     // private int a = 2;
-	//     // private string b = "text";
-
-	//     // Called when the node enters the scene tree for the first time.
-	//     public override void _Ready()
-	//     {
-
-	//     }
 
 
 
 
-	// const Vector3 CHUNK_MIDPOINT = Vector3(0.5, 0.5, 0.5) * Chunk.CHUNK_SIZE;
-	// const float CHUNK_END_SIZE = Chunk.CHUNK_SIZE - 1;
+	Vector3 CHUNK_MIDPOINT = new Vector3(0.5f, 0.5f, 0.5f) * Chunk.CHUNK_SIZE;
+	const float CHUNK_END_SIZE = Chunk.CHUNK_SIZE - 1;
 
-	// var render_distance setget _set_render_distance
-	// var _delete_distance = 0;
-	// var effective_render_distance = 0;
-	// Vector3 _old_player_chunk = new Vector3(); // TODO: Vector3i
+	float _render_distance;
+	public float render_distance
+	{
+		get => _render_distance;
+		set
+		{
+			_render_distance = value;
+			_delete_distance = value + 2;
+		}
+	} //setget _set_render_distance
+	  float _delete_distance = 0;
+	  public int effective_render_distance = 0;
+	  Vector3 _old_player_chunk = new Vector3(); // TODO: Vector3i
 
-	// bool _generating = true;
-	// bool _deleting = false;
+	bool _generating = true;
+	bool _deleting = false;
 
-	// Dictionary _chunks = {}
+	Dictionary _chunks = new Dictionary();
 
-	// onready var player = $"../Player"
+	Player player;
+		public override void _Ready()
+		{
+			player = GetNode<Player>("../Player");
 
-	//  public override void _Process(float delta)
-	//  {
-	// 	_set_render_distance(Settings.render_distance)
-	// 	var player_chunk = (player.transform.origin / Chunk.CHUNK_SIZE).round()
+		}
 
-	// 	if _deleting or player_chunk != _old_player_chunk:
-	// 		_delete_far_away_chunks(player_chunk)
-	// 		_generating = true
+	IEnumerable<int> makeRange(int middle) 
+	{
+		return Enumerable.Range(middle - effective_render_distance, 2 * effective_render_distance);
+	}
 
-	// 	if not _generating:
-	// 		return
+	 public override void _Process(float delta)
+	 {
+		render_distance = Settings.render_distance;
+		var player_chunk = (player.Transform.origin / Chunk.CHUNK_SIZE).Round();
 
-	// 	# Try to generate chunks ahead of time based on where the player is moving.
-	// 	player_chunk.y += round(clamp(player.velocity.y, -render_distance / 4, render_distance / 4))
+		if (_deleting || player_chunk != _old_player_chunk) {
+			_delete_far_away_chunks(player_chunk);
+			_generating = true;
+		}
 
-	// 	# Check existing chunks within range. If it doesn't exist, create it.
-	// 	for x in range(player_chunk.x - effective_render_distance, player_chunk.x + effective_render_distance):
-	// 		for y in range(player_chunk.y - effective_render_distance, player_chunk.y + effective_render_distance):
-	// 			for z in range(player_chunk.z - effective_render_distance, player_chunk.z + effective_render_distance):
-	// 				var chunk_position = Vector3(x, y, z)
-	// 				if player_chunk.distance_to(chunk_position) > render_distance:
-	// 					continue
+		if (! _generating)
+			return;
 
-	// 				if _chunks.has(chunk_position):
-	// 					continue
+		// Try to generate chunks ahead of time based on where the player is moving.
+		player_chunk.y += Round(Clamp(player.velocity.y, -render_distance / 4, render_distance / 4));
 
-	// 				var chunk = Chunk.new()
-	// 				chunk.chunk_position = chunk_position
-	// 				_chunks[chunk_position] = chunk
-	// 				add_child(chunk)
-	// 				return
+		// Check existing chunks within range. If it doesn't exist, create it.
+ 		foreach (int x in makeRange((int)player_chunk.x)) {
+			foreach (int y in makeRange((int)player_chunk.y)) {
+				foreach (int z in makeRange((int)player_chunk.z)) {
+					var chunk_position = new Vector3(x, y, z);
+					if (player_chunk.DistanceTo(chunk_position) > render_distance)
+						continue;
 
-	// 	# If we didn't generate any chunks (and therefore didn't return), what next?
-	// 	if effective_render_distance < render_distance:
-	// 		# We can move on to the next stage by increasing the effective distance.
-	// 		effective_render_distance += 1
-	// 	else:
-	// 		# Effective render distance is maxed out, done generating.
-	// 		_generating = false
-	//  }
+					if (_chunks.Contains(chunk_position))
+						continue;
 
-	// func get_block_global_position(block_global_position):
-	// 	var chunk_position = (block_global_position / Chunk.CHUNK_SIZE).floor()
-	// 	if _chunks.has(chunk_position):
-	// 		var chunk = _chunks[chunk_position]
-	// 		var sub_position = block_global_position.posmod(Chunk.CHUNK_SIZE)
-	// 		if chunk.data.has(sub_position):
-	// 			return chunk.data[sub_position]
-	// 	return 0
+					Chunk chunk = new Chunk();
+					chunk.chunk_position = chunk_position;
+					_chunks[chunk_position] = chunk;
+					AddChild(chunk);
+					return;
+				}
+			}
+		}
 
+		// If we didn't generate any chunks (and therefore didn't return), what next?
+		if (effective_render_distance < render_distance)
+			// We can move on to the next stage by increasing the effective distance.
+			effective_render_distance += 1;
+		else
+			// Effective render distance is maxed out, done generating.
+			_generating = false;
+	 }
 
-	// func set_block_global_position(block_global_position, block_id):
+	public int get_block_global_position(Vector3 block_global_position)
+	{
+		var chunk_position = (block_global_position / Chunk.CHUNK_SIZE).Floor();
+		if (_chunks.Contains(chunk_position)) {
+			var chunk = _chunks[chunk_position];
+			// var sub_position = block_global_position.posmod(Chunk.CHUNK_SIZE);
+			// if (chunk.data.Contains(sub_position))
+			// 	return chunk.data[sub_position];
+		}
+		return 0;
+	}
+
+	public void set_block_global_position(Vector3 block_global_position, int block_id)
+	{
 	// 	var chunk_position = (block_global_position / Chunk.CHUNK_SIZE).floor()
 	// 	var chunk = _chunks[chunk_position]
 	// 	var sub_position = block_global_position.posmod(Chunk.CHUNK_SIZE)
@@ -110,7 +130,7 @@ public class VoxelWorld : Node
 	// 			_chunks[chunk_position + Vector3.DOWN].regenerate()
 	// 		elif sub_position.y == CHUNK_END_SIZE:
 	// 			_chunks[chunk_position + Vector3.UP].regenerate()
-
+	 }
 
 	public void clean_up()
 	{
@@ -125,7 +145,8 @@ public class VoxelWorld : Node
 	}
 
 
-	// func _delete_far_away_chunks(player_chunk):
+	void _delete_far_away_chunks(Vector3 player_chunk)
+	{
 	// 	_old_player_chunk = player_chunk
 	// 	# If we need to delete chunks, give the new chunk system a chance to catch up.
 	// 	effective_render_distance = max(1, effective_render_distance - 1)
@@ -152,6 +173,7 @@ public class VoxelWorld : Node
 
 	// 	# We're done deleting.
 	// 	_deleting = false
+	}
 
 
 	// func _set_render_distance(value):

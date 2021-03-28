@@ -4,10 +4,10 @@ using System;
 public class Player : KinematicBody
 {
 
-// Vector3 velocity = new Vector3();
+public Vector3 velocity = new Vector3();
 
-// Vector2 _mouse_motion = new Vector2();
-// int _selected_block = 6;
+Vector2 _mouse_motion = new Vector2();
+int _selected_block = 6;
 
 // onready var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -17,14 +17,14 @@ public class Player : KinematicBody
 // onready var voxel_world = $"../VoxelWorld"
 // onready var crosshair = $"../PauseMenu/Crosshair"
 
-// 	public override void _Ready()
-// 	{
-// 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)        
-// 	}
+	public override void _Ready()
+	{
+		Input.SetMouseMode(Input.MouseMode.Captured);        
+	}
 
 
-// public override void _Process(float delta)
-// {
+public override void _Process(float delta)
+{
 	
 // 	// Mouse movement.
 // 	_mouse_motion.y = clamp(_mouse_motion.y, -1550, 1550)
@@ -63,11 +63,11 @@ public class Player : KinematicBody
 // 		elif placing:
 // 			var block_global_position = (position + normal / 2).floor()
 // 			voxel_world.set_block_global_position(block_global_position, _selected_block)
-// }
+}
 
 
-// public override void _physics_process(delta)
-// {
+public override void _PhysicsProcess(float delta)
+{
 	
 // 	// Crouching.
 // 	var crouching = Input.is_action_pressed("crouch")
@@ -92,7 +92,7 @@ public class Player : KinematicBody
 // 	// Jumping, applied next frame.
 // 	if is_on_floor() and Input.is_action_pressed("jump"):
 // 		velocity.y = 5
-// }
+}
 
 
 // void _input(event) 

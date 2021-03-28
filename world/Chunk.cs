@@ -4,14 +4,14 @@ using Godot.Collections;
 
 public class Chunk : StaticBody
 {
-	const int CHUNK_SIZE = 16; // Keep in sync with TerrainGenerator.
+	public const int CHUNK_SIZE = 16; // Keep in sync with TerrainGenerator.
 	const int TEXTURE_SHEET_WIDTH = 8;
 
 	const int CHUNK_LAST_INDEX = CHUNK_SIZE - 1;
 	const float TEXTURE_TILE_SIZE = 1.0f / TEXTURE_SHEET_WIDTH;
 
-	Dictionary data = new Dictionary();
-	Vector3 chunk_position = new Vector3(); // TODO: Vector3i
+	public Dictionary data = new Dictionary();
+	public Vector3 chunk_position = new Vector3(); // TODO: Vector3i
 
 	Godot.Thread _thread;
 
