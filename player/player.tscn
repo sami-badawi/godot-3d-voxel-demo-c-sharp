@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://player/player.gd" type="Script" id=1]
+[ext_resource path="res://player/Player.cs" type="Script" id=1]
 [ext_resource path="res://world/textures/texture_sheet.png" type="Texture" id=2]
 
 [sub_resource type="CylinderShape" id=1]
