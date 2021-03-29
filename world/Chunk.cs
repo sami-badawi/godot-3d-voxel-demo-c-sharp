@@ -17,31 +17,33 @@ public class Chunk : StaticBody
 
 	Node voxel_world;
 
-//     public override void _Ready()
-//     {
-//         voxel_world = GetParent();
-//         Transform.origin = chunk_position * CHUNK_SIZE;
+	public override void _Ready()
+	{
+		voxel_world = GetParent();
+		var t = GlobalTransform;
+		t.origin = chunk_position * CHUNK_SIZE;
+		GlobalTransform = t;
 
-//         Name = chunk_position.ToString();
+		Name = chunk_position.ToString();
 
-//         if (Settings.world_type == 0)
-//         {
-//             data = TerrainGenerator.random_blocks();
-//         }
-//         else
-//         {
-//             data = TerrainGenerator.flat(chunk_position);
-//         }
-//         // We can only add colliders in the main thread due to physics limitations.
-//         _generate_chunk_collider()
-//     // However, we can use a thread for mesh generation.
-//         _thread = Godot.Thread.New();
+		if (Settings.world_type == 0)
+		{
+			data = TerrainGenerator.random_blocks();
+		}
+		else
+		{
+			data = TerrainGenerator.flat(chunk_position);
+		}
+		// We can only add colliders in the main thread due to physics limitations.
+		_generate_chunk_collider();
+	// However, we can use a thread for mesh generation.
+		_thread = new Godot.Thread();
 
-//         _thread.Start(this, "_generate_chunk_mesh");
-//     }
+		_thread.Start(this, "_generate_chunk_mesh");
+	}
 
-//     public void regenerate()
-//     {
+	public void regenerate()
+	{
 //         // Clear out all old nodes first.
 //         foreach (var c in GetChildren())
 //         {
@@ -54,21 +56,21 @@ public class Chunk : StaticBody
 
 
 //         _generate_chunk_mesh(0);
-//     }
+	}
 
-//     void _generate_chunk_collider()
-//     {
-//         if (data.empty())
-//         {
-//             // Avoid errors caused by StaticBody not having colliders.
-//             _create_block_collider(Vector3.Zero);
-//         }
-//         CollisionLayer = 0;
-//         CollisionMask = 0;
+	void _generate_chunk_collider()
+	{
+		// if (data.empty())
+		// {
+		//     // Avoid errors caused by StaticBody not having colliders.
+		//     _create_block_collider(Vector3.Zero);
+		// }
+		CollisionLayer = 0;
+		CollisionMask = 0;
 
 
-//         return;
-//     }
+		return;
+
 //     // For each block, generate a collider. Ensure collision layers are enabled.
 //     CollisionLayer = 0xFFFFF;
 //         CollisionMask = 0xFFFFF;
@@ -81,11 +83,11 @@ public class Chunk : StaticBody
 
 
 //     }
-//     }
+	}
 
 
-//     void _generate_chunk_mesh(int _this_argument_exists_due_to_bug_9924)
-// {
+	void _generate_chunk_mesh(int _this_argument_exists_due_to_bug_9924)
+{
 
 //     if (data.empty())
 //         return;
@@ -118,11 +120,11 @@ public class Chunk : StaticBody
 //     mi.material_override = preload("res://world/textures/material.tres")
 
 //     add_child(mi)
-//     }
+	}
 
 
-//     void _draw_block_mesh(surface_tool, block_sub_position, block_id)
-// {
+	void _draw_block_mesh(SurfaceTool surface_tool, Vector3 block_sub_position, int block_id)
+{
 
 //     var verts = calculate_block_verts(block_sub_position);
 
@@ -305,33 +307,33 @@ public class Chunk : StaticBody
 
 //     if (block_id != other_block_id && is_block_transparent(other_block_id))
 //     _draw_block_face(surface_tool, [verts[2], verts[3], verts[6], verts[7]], top_uvs)
-//     }
+	}
 
 
-//     void _draw_block_face(surface_tool, verts, uvs)
-// {
-//     surface_tool.add_uv(uvs[1]); surface_tool.add_vertex(verts[1])
+	void _draw_block_face(SurfaceTool surface_tool, Godot.Collections.Array verts, Godot.Collections.Array uvs)
+{
+	// surface_tool.AddUv(uvs[1]); surface_tool.AddVertex(add_vertex(verts[1]));
 
 
-//     surface_tool.add_uv(uvs[2]); surface_tool.add_vertex(verts[2])
+	// surface_tool.add_uv(uvs[2]); surface_tool.add_vertex(verts[2])
 
 
-//     surface_tool.add_uv(uvs[3]); surface_tool.add_vertex(verts[3])
+	// surface_tool.add_uv(uvs[3]); surface_tool.add_vertex(verts[3])
 
 
 
-//     surface_tool.add_uv(uvs[2]); surface_tool.add_vertex(verts[2])
+	// surface_tool.add_uv(uvs[2]); surface_tool.add_vertex(verts[2])
 
 
-//     surface_tool.add_uv(uvs[1]); surface_tool.add_vertex(verts[1])
+	// surface_tool.add_uv(uvs[1]); surface_tool.add_vertex(verts[1])
 
 
-//     surface_tool.add_uv(uvs[0]); surface_tool.add_vertex(verts[0])
-//     }
+	// surface_tool.add_uv(uvs[0]); surface_tool.add_vertex(verts[0])
+	}
 
 
-// void _create_block_collider(block_sub_position)
-// {
+void _create_block_collider(Vector3 block_sub_position)
+{
 //     var collider = CollisionShape.New();
 
 
@@ -345,11 +347,11 @@ public class Chunk : StaticBody
 
 
 //     add_child(collider)
-//     }
+	}
 
 
-// static Godot.Collections.Array calculate_block_uvs(int block_id)
-// {
+static Godot.Collections.Array calculate_block_uvs(int block_id)
+{
 
 //     // This method only supports square texture sheets.
 //     var row = block_id / TEXTURE_SHEET_WIDTH;
@@ -357,19 +359,19 @@ public class Chunk : StaticBody
 //     var col = block_id % TEXTURE_SHEET_WIDTH;
 
 
-//     return new()
+	return new Godot.Collections.Array();
 //     {
 //         TEXTURE_TILE_SIZE * new Vector2(col, row),
 //         TEXTURE_TILE_SIZE * new Vector2(col, row + 1),
 //         TEXTURE_TILE_SIZE * new Vector2(col + 1, row),
 //         TEXTURE_TILE_SIZE * new Vector2(col + 1, row + 1),
 //     }
-//     }
+	}
 
 
-// static Godot.Collections.Array calculate_block_verts(Vector3 block_position)
-// {
-//     return new()
+static Godot.Collections.Array calculate_block_verts(Vector3 block_position)
+{
+	return new Godot.Collections.Array();
 //     {
 //         new Vector3(block_position.x, block_position.y, block_position.z),
 //         new Vector3(block_position.x, block_position.y, block_position.z + 1),
@@ -380,12 +382,12 @@ public class Chunk : StaticBody
 //         new Vector3(block_position.x + 1, block_position.y + 1, block_position.z),
 //         new Vector3(block_position.x + 1, block_position.y + 1, block_position.z + 1)
 //     }
-//     }
+	}
 
 
-// static bool is_block_transparent(int block_id)
-// {
-//     return block_id == 0 || (block_id > 25 && block_id < 30);
-// }
+static bool is_block_transparent(int block_id)
+{
+	return block_id == 0 || (block_id > 25 && block_id < 30);
+}
 
 }

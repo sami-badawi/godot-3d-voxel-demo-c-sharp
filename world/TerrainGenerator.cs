@@ -35,7 +35,7 @@ public class TerrainGenerator : Resource
 		return random_data;
 	}
 
-	static Dictionary flat(Vector3 chunk_position)
+	public static Dictionary flat(Vector3 chunk_position)
 	{
 		var data = new Dictionary();
 
