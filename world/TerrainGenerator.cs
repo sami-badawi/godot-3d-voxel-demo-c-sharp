@@ -17,9 +17,9 @@ public class TerrainGenerator : Resource
 	}
 
 
-	static public Dictionary random_blocks()
+	static public Dictionary<Vector3, int> random_blocks()
 	{
-		var random_data = new Dictionary();
+		var random_data = new Dictionary<Vector3, int>();
 		foreach (int x in Enumerable.Range(0, CHUNK_SIZE))
 		{
 			foreach (int y in Enumerable.Range(0, CHUNK_SIZE))
@@ -28,16 +28,16 @@ public class TerrainGenerator : Resource
 				{
 					var vec = new Vector3(x, y, z);
 					if (GD.Randf() < 0.01)
-						random_data[vec] = GD.Randi() % 29 + 1;
+						random_data[vec] = (int) GD.Randi() % 29 + 1;
 				}
 			}
 		}
 		return random_data;
 	}
 
-	public static Dictionary flat(Vector3 chunk_position)
+	public static Dictionary<Vector3, int> flat(Vector3 chunk_position)
 	{
-		var data = new Dictionary();
+		var data = new Dictionary<Vector3, int>();
 
 		if (chunk_position.y != -1)
 			return data;

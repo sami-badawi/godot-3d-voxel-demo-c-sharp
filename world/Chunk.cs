@@ -10,7 +10,7 @@ public class Chunk : StaticBody
 	const int CHUNK_LAST_INDEX = CHUNK_SIZE - 1;
 	const float TEXTURE_TILE_SIZE = 1.0f / TEXTURE_SHEET_WIDTH;
 
-	public Dictionary data = new Dictionary();
+	public Dictionary<Vector3, int> data = new Dictionary<Vector3, int>();
 	public Vector3 chunk_position = new Vector3(); // TODO: Vector3i
 
 	Godot.Thread _thread;
@@ -44,18 +44,18 @@ public class Chunk : StaticBody
 
 	public void regenerate()
 	{
-//         // Clear out all old nodes first.
-//         foreach (var c in GetChildren())
-//         {
-//             RemoveChild(c);
-//             c.QueueFree();
-//         }
+		// Clear out all old nodes first.
+		foreach (var c in GetChildren())
+		{
+			if (c is Node node) {
+			RemoveChild(node);
+			node.QueueFree();
+			}
+		}
 
-//         // Then generate new ones.
-//         _generate_chunk_collider();
-
-
-//         _generate_chunk_mesh(0);
+		// Then generate new ones.
+		_generate_chunk_collider();
+		_generate_chunk_mesh(0);
 	}
 
 	void _generate_chunk_collider()
@@ -67,8 +67,6 @@ public class Chunk : StaticBody
 		}
 		CollisionLayer = 0;
 		CollisionMask = 0;
-
-
 		return;
 
 	// For each block, generate a collider. Ensure collision layers are enabled.
