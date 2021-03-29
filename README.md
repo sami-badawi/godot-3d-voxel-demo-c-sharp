@@ -14,7 +14,7 @@ Check out this demo on the asset library: https://godotengine.org/asset-library/
 Started work on porting the original 3D Voxel Demo from GD script to C#.
 Porting a dynamic language to a static is a little messy. 
 
-Some classes are fully ported other are half ported and not enabled.
+All GD script classes are fully ported to C# but not all are wiered up since there is bug and the boxes are not showing up when game is running.
 
 Trying to keep the code as close to the GD script version as possible.
 

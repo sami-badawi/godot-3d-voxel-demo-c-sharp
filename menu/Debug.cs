@@ -29,7 +29,7 @@ public class Debug : Label
 	String _vector_to_string_appropriate_digits(Vector3 vector)
 	{
 		int[] factors = { 1000, 1000, 1000 };
-		foreach (int i in factors)
+		for (int i = 0; i < factors.Length; i++)
 		{
 			if (Abs(vector[i]) > 40960)
 			{
