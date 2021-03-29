@@ -60,20 +60,20 @@ public class Chunk : StaticBody
 
 	void _generate_chunk_collider()
 	{
-		// if (data.empty())
-		// {
-		//     // Avoid errors caused by StaticBody not having colliders.
-		//     _create_block_collider(Vector3.Zero);
-		// }
+		if (0 < data.Count)
+		{
+			// Avoid errors caused by StaticBody not having colliders.
+			_create_block_collider(Vector3.Zero);
+		}
 		CollisionLayer = 0;
 		CollisionMask = 0;
 
 
 		return;
 
-//     // For each block, generate a collider. Ensure collision layers are enabled.
-//     CollisionLayer = 0xFFFFF;
-//         CollisionMask = 0xFFFFF;
+	// For each block, generate a collider. Ensure collision layers are enabled.
+	CollisionLayer = 0xFFFFF;
+		CollisionMask = 0xFFFFF;
 //         for block_position in data.keys() {
 //             var block_id = data[block_position]
 
@@ -89,15 +89,15 @@ public class Chunk : StaticBody
 	void _generate_chunk_mesh(int _this_argument_exists_due_to_bug_9924)
 {
 
-//     if (data.empty())
-//         return;
+	if (0 < data.Count)
+		return;
 
-//     var surface_tool = SurfaceTool.new()
+	var surface_tool = new SurfaceTool();
 
 
-//     surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+	surface_tool.Begin(Mesh.PrimitiveType.Triangles);
 
-//     # For each block, add data to the SurfaceTool and generate a collider.
+	// For each block, add data to the SurfaceTool and generate a collider.
 //     for block_position in data.keys():
 
 //         var block_id = data[block_position]
@@ -126,7 +126,7 @@ public class Chunk : StaticBody
 	void _draw_block_mesh(SurfaceTool surface_tool, Vector3 block_sub_position, int block_id)
 {
 
-//     var verts = calculate_block_verts(block_sub_position);
+	var verts = calculate_block_verts(block_sub_position);
 
 
 //     var uvs = calculate_block_uvs(block_id);
@@ -334,29 +334,29 @@ public class Chunk : StaticBody
 
 void _create_block_collider(Vector3 block_sub_position)
 {
-//     var collider = CollisionShape.New();
+	var collider = new CollisionShape();
+
+	var boxShape = new BoxShape();
+	boxShape.Extents = Vector3.One / 2;
+	collider.Shape = boxShape;
+
+	var t = collider.GlobalTransform;
+	t.origin = block_sub_position + Vector3.One / 2;
+
+	collider.GlobalTransform = t;
 
 
-//     collider.shape = BoxShape.New();
-
-
-//     collider.shape.extents = Vector3.One / 2;
-
-
-//     collider.transform.origin = block_sub_position + Vector3.One / 2;
-
-
-//     add_child(collider)
+	// add_child(collider);
 	}
 
 
 static Godot.Collections.Array calculate_block_uvs(int block_id)
 {
 
-//     // This method only supports square texture sheets.
-//     var row = block_id / TEXTURE_SHEET_WIDTH;
+	// This method only supports square texture sheets.
+	var row = block_id / TEXTURE_SHEET_WIDTH;
 
-//     var col = block_id % TEXTURE_SHEET_WIDTH;
+	var col = block_id % TEXTURE_SHEET_WIDTH;
 
 
 	return new Godot.Collections.Array();
