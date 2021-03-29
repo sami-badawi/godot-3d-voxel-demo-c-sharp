@@ -13,7 +13,7 @@ public class Chunk : StaticBody
 	public Dictionary<Vector3, int> data = new Dictionary<Vector3, int>();
 	public Vector3 chunk_position = new Vector3(); // TODO: Vector3i
 
-	Godot.Thread _thread;
+	public Godot.Thread _thread;
 
 	VoxelWorld voxel_world;
 
@@ -270,7 +270,7 @@ public class Chunk : StaticBody
 		return vertexes;
 	}
 
-	static bool is_block_transparent(int block_id)
+	public static bool is_block_transparent(int block_id)
 	{
 		return block_id == 0 || (block_id > 25 && block_id < 30);
 	}
