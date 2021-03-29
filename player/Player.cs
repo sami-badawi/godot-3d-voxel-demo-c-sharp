@@ -52,11 +52,12 @@ public class Player : KinematicBody
 				_selected_block -= 1;
 			if (Input.IsActionJustPressed("next_block"))
 				_selected_block += 1;
-			// _selected_block = wrapi(_selected_block, 1, 30);
+			_selected_block = Wrap(_selected_block, 1, 30);
 		}
 		// 	# Set the appropriate texture.
 		var uv = Chunk.calculate_block_uvs(_selected_block);
-		// selected_block_texture.Texture.region = new Rect2(uv[0] * 512, Vector2.One * 64);
+		Texture texture = selected_block_texture.Texture;
+		// texture.region = new Rect2(uv[0] * 512, Vector2.One * 64); // XXX not seeing region in Texture
 
 		// Block breaking/placing.
 		if (crosshair.Visible && raycast.IsColliding())

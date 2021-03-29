@@ -23,7 +23,6 @@ public class Chunk : StaticBody
 		var t = GlobalTransform;
 		t.origin = chunk_position * CHUNK_SIZE;
 		GlobalTransform = t;
-
 		Name = chunk_position.ToString();
 
 		if (Settings.world_type == 0)
@@ -36,9 +35,9 @@ public class Chunk : StaticBody
 		}
 		// We can only add colliders in the main thread due to physics limitations.
 		_generate_chunk_collider();
+
 		// However, we can use a thread for mesh generation.
 		_thread = new Godot.Thread();
-
 		_thread.Start(this, "_generate_chunk_mesh");
 	}
 
@@ -73,21 +72,15 @@ public class Chunk : StaticBody
 		// For each block, generate a collider. Ensure collision layers are enabled.
 		CollisionLayer = 0xFFFFF;
 		CollisionMask = 0xFFFFF;
-		//         for block_position in data.keys() {
-		//             var block_id = data[block_position]
-
-
-		//         if (block_id != 27 && block_id != 28)
-		//                 _create_block_collider(block_position)
-
-
-		//     }
+				foreach (var block_position in data.Keys) {
+					var block_id = data[block_position];
+				if (block_id != 27 && block_id != 28)
+						_create_block_collider(block_position);
+			}
 	}
-
 
 	void _generate_chunk_mesh(int _this_argument_exists_due_to_bug_9924)
 	{
-
 		if (0 < data.Count)
 			return;
 
@@ -98,22 +91,17 @@ public class Chunk : StaticBody
 		foreach (var block_position in data.Keys)
 		{
 			var block_id = data[block_position];
-
 			_draw_block_mesh(surface_tool, block_position, block_id);
 
 			// Create the chunk's mesh from the SurfaceTool data.
 			surface_tool.GenerateNormals();
-
 			surface_tool.GenerateTangents();
 
 			surface_tool.Index();
-
 			var array_mesh = surface_tool.Commit();
 
 			var mi = new MeshInstance();
-
 			mi.Mesh = array_mesh;
-
 			mi.MaterialOverride = ResourceLoader.Load("res://world/textures/material.tres") as Material;
 
 			AddChild(mi);
