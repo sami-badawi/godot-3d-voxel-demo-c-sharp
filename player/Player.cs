@@ -4,7 +4,6 @@ using static Godot.Mathf;
 
 public class Player : KinematicBody
 {
-
 	public Vector3 velocity = new Vector3();
 	Vector2 _mouse_motion = new Vector2();
 	int _selected_block = 6;
@@ -25,7 +24,6 @@ public class Player : KinematicBody
 		crosshair = GetNode<Container>("../PauseMenu/Crosshair");
 		Input.SetMouseMode(Input.MouseMode.Captured);
 	}
-
 
 	public override void _Process(float delta)
 	{
@@ -57,8 +55,8 @@ public class Player : KinematicBody
 			// _selected_block = wrapi(_selected_block, 1, 30);
 		}
 		// 	# Set the appropriate texture.
-		// var uv = Chunk.calculate_block_uvs(_selected_block);
-		// selected_block_texture.texture.region = Rect2(uv[0] * 512, Vector2.ONE * 64);
+		var uv = Chunk.calculate_block_uvs(_selected_block);
+		// selected_block_texture.Texture.region = new Rect2(uv[0] * 512, Vector2.One * 64);
 
 		// Block breaking/placing.
 		if (crosshair.Visible && raycast.IsColliding())
