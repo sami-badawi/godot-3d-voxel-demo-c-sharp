@@ -24,8 +24,8 @@ public class Environment : WorldEnvironment
 		if (Environment.FogDepthEnd > target_distance) {
 			rate *= 2;
 		}
-		// Environment.FogDepthBegin = move_toward(Environment.FogDepthBegin, target_distance - Chunk.CHUNK_SIZE, rate);
-		// Environment.FogDepthEnd = move_toward(Environment.FogDepthEnd, target_distance, rate);
+		Environment.FogDepthBegin = MoveToward(Environment.FogDepthBegin, target_distance - Chunk.CHUNK_SIZE, rate);
+		Environment.FogDepthEnd = MoveToward(Environment.FogDepthEnd, target_distance, rate);
 		Environment.DofBlurFarDistance = Environment.FogDepthEnd;     
 	}
 }
