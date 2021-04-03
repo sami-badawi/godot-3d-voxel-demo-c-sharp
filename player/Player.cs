@@ -57,7 +57,8 @@ public class Player : KinematicBody
 		// 	# Set the appropriate texture.
 		var uv = Chunk.calculate_block_uvs(_selected_block);
 		Texture texture = selected_block_texture.Texture;
-		// texture.region = new Rect2(uv[0] * 512, Vector2.One * 64); // XXX not seeing region in Texture
+		if   (texture is AtlasTexture atlasTexture)
+			atlasTexture.Region = new Rect2(uv[0] * 512, Vector2.One * 64);
 
 		// Block breaking/placing.
 		if (crosshair.Visible && raycast.IsColliding())

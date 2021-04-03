@@ -60,23 +60,24 @@ public class Chunk : StaticBody
 
 	void _generate_chunk_collider()
 	{
-		if (0 < data.Count)
+		if (0 == data.Count)
 		{
 			// Avoid errors caused by StaticBody not having colliders.
 			_create_block_collider(Vector3.Zero);
+			CollisionLayer = 0;
+			CollisionMask = 0;
+			return;
 		}
-		CollisionLayer = 0;
-		CollisionMask = 0;
-		return;
 
 		// For each block, generate a collider. Ensure collision layers are enabled.
 		CollisionLayer = 0xFFFFF;
 		CollisionMask = 0xFFFFF;
-				foreach (var block_position in data.Keys) {
-					var block_id = data[block_position];
-				if (block_id != 27 && block_id != 28)
-						_create_block_collider(block_position);
-			}
+		foreach (var block_position in data.Keys)
+		{
+			var block_id = data[block_position];
+			if (block_id != 27 && block_id != 28)
+				_create_block_collider(block_position);
+		}
 	}
 
 	void _generate_chunk_mesh(int _this_argument_exists_due_to_bug_9924)
@@ -92,20 +93,23 @@ public class Chunk : StaticBody
 		{
 			var block_id = data[block_position];
 			_draw_block_mesh(surface_tool, block_position, block_id);
-
-			// Create the chunk's mesh from the SurfaceTool data.
-			surface_tool.GenerateNormals();
-			surface_tool.GenerateTangents();
-
-			surface_tool.Index();
-			var array_mesh = surface_tool.Commit();
-
-			var mi = new MeshInstance();
-			mi.Mesh = array_mesh;
-			mi.MaterialOverride = ResourceLoader.Load("res://world/textures/material.tres") as Material;
-
-			AddChild(mi);
 		}
+		// Create the chunk's mesh from the SurfaceTool data.
+		surface_tool.GenerateNormals();
+		surface_tool.GenerateTangents();
+
+		surface_tool.Index();
+		var array_mesh = surface_tool.Commit();
+
+		var mi = new MeshInstance();
+		mi.Mesh = array_mesh;
+		var materialOrNull = ResourceLoader.Load("res://world/textures/material.tres") as Material;
+		if (materialOrNull == null)
+			GD.Print("materialOrNull == null");
+		else
+			mi.MaterialOverride = materialOrNull;
+
+		AddChild(mi);
 	}
 
 
