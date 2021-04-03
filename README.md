@@ -11,19 +11,27 @@ Check out this demo on the asset library: https://godotengine.org/asset-library/
 
 ## Work In Progress C# Port
 
-Started work on porting the original 3D Voxel Demo from GD script to C#.
+Started work on porting the [original 3D Voxel Demo](https://godotengine.org/asset-library/asset/676) from GD script to C#.
 Porting a dynamic language to a static is a little messy. 
 
-All GD script classes are fully ported to C# and are wiered up 
+All GD script classes are fully ported to C# and are wired up to be used.
 
-There is bug and the voxel boxes are not showing up when game is running.
+There are bugs and the voxel boxes are not showing up when game is running.
 
 ### Last Playing Commit
 
-commit 87c6921defaf9a10b00e474e6999f259cac16f54
+If you check out this commit:
+
+```
+git checkout 87c6921defaf9a10b00e474e6999f259cac16f54
+```
+
+You will see the game looking like the original but part of games is controlled by new C# classes and part by original GD script classes.
+
 ### Goal for Port
 
-Trying to keep the code as close to the GD script version as possible.
+Trying to keep the code as close to the GD script version as possible. 
+This is meant to be a starter project for a dynamic procedural generated 3D world.
 
 Pull requests are welcome.
 
