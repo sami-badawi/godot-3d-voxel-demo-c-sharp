@@ -32,6 +32,7 @@ You will see the game looking like the original but part of games is controlled 
 
 Trying to keep the code as close to the GD script version as possible. 
 This is meant to be a starter project for a dynamic procedural generated 3D world.
+Maybe this could be accepted as an official Godot asset / template.
 
 Pull requests are welcome.
 
