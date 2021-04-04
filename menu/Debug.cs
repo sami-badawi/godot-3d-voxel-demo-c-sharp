@@ -20,8 +20,7 @@ public class Debug : Label
 		Text = "Position: " + _vector_to_string_appropriate_digits(player.Transform.origin);
 		Text += "\nEffective render distance: " + voxel_world.effective_render_distance.ToString();
 		Text += "\nLooking: " + _cardinal_string_from_radians(player.Transform.basis.GetEuler().y);
-		// Text += "\nMemory: " + "%3.0f" % (OS.GetStaticMemoryUsage() / 1048576.0) + " MiB"; // XXX
-		Text += "\nMemory: " + (OS.GetStaticMemoryUsage() / 1048576.0) + " MiB";
+		Text += String.Format( "\nMemory: {0:###} MiB",OS.GetStaticMemoryUsage() / 1048576.0);
 		Text += "\nFPS: " + Engine.GetFramesPerSecond();
 	}
 

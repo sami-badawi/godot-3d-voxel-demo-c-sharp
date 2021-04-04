@@ -9,10 +9,9 @@ public class TerrainGenerator : Resource
 	const int CHUNK_SIZE = 16;
 
 
-	static Dictionary empty()
+	static Dictionary<Vector3, int> empty()
 	{
-
-		var random_data = new Dictionary();
+		var random_data = new Dictionary<Vector3, int>();
 		return random_data;
 	}
 

@@ -25,7 +25,7 @@ public class MainMenu : Control
 
 	public void _on_Options_pressed()
 	{
-		// options.prev_menu = title;
+		// options.prev_menu = title; // XXX
 		options.Visible = true;
 		title.Visible = false;
 	}

@@ -96,14 +96,16 @@ public class Chunk : StaticBody
 		}
 		// Create the chunk's mesh from the SurfaceTool data.
 		surface_tool.GenerateNormals();
-		surface_tool.GenerateTangents();
+		// surface_tool.GenerateTangents(); // XXX add back
 
 		surface_tool.Index();
 		var array_mesh = surface_tool.Commit();
 
 		var mi = new MeshInstance();
 		mi.Mesh = array_mesh;
-		var materialOrNull = ResourceLoader.Load("res://world/textures/material.tres") as Material;
+		var resource = ResourceLoader.Load("res://world/textures/material.tres");
+		GD.Print($"====== resource should be material: {resource}");
+		var materialOrNull = resource as Material;
 		if (materialOrNull == null)
 			GD.Print("materialOrNull == null");
 		else
@@ -236,10 +238,10 @@ public class Chunk : StaticBody
 		var boxShape = new BoxShape();
 		boxShape.Extents = Vector3.One / 2;
 		collider.Shape = boxShape;
+		AddChild(collider); // Seems like it need to be before the transform operations
 		var t = collider.GlobalTransform;
 		t.origin = block_sub_position + Vector3.One / 2;
 		collider.GlobalTransform = t;
-		AddChild(collider);
 	}
 
 	public static Godot.Collections.Array<Vector2> calculate_block_uvs(int block_id)
